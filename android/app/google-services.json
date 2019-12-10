@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "66244949053",
+    "firebase_url": "https://tagchat-26750.firebaseio.com",
+    "project_id": "tagchat-26750",
+    "storage_bucket": "tagchat-26750.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:66244949053:android:07e3b23b61ccdaa2512654",
+        "android_client_info": {
+          "package_name": "com.example.tagchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "66244949053-u2u9o0g2ucu2tj1i982un6l6hh0km4ma.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDb4jN30PlJTUY7EdaBFuf01ATeamToBoU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "66244949053-u2u9o0g2ucu2tj1i982un6l6hh0km4ma.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
