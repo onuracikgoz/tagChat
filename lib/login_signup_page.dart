@@ -138,7 +138,7 @@ class _LoginSignPage extends State<LoginSignPage> {
             ),
             borderRadius: BorderRadius.circular(32.0)),
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        hintText: 'E-mail',
+        hintText: 'onur@onur.com',
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(32.0),
         ),
@@ -149,6 +149,7 @@ class _LoginSignPage extends State<LoginSignPage> {
 
     Widget passwordField () { return TextFormField(
       obscureText: true,
+      
       style: style,
       decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(

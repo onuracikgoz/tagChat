@@ -1,11 +1,15 @@
-import 'package:tagchat/authentication.dart';
+
+
 import 'package:tagchat/locator.dart';
 import 'package:tagchat/model/user.dart';
+import 'package:tagchat/services/authentication.dart';
+import 'package:tagchat/services/db_base.dart';
 
 enum AppMode { DEBUG, RELEASE }
 
 class UserRepository implements Auth {
   Auth _firebaseAuth = locator<Auth>();
+  FirestoreDBService _firestoreDBService = locator<FirestoreDBService>();
 
   AppMode appMode = AppMode.RELEASE;
 
@@ -48,7 +52,13 @@ class UserRepository implements Auth {
   @override
   Future<User> signUp(String email, String password) async {
     if (appMode == AppMode.RELEASE) {
-      return await _firebaseAuth.signUp(email, password);
+    
+      User _user = await _firebaseAuth.signUp(email, password);
+      bool _sonuc =await  _firestoreDBService.saveUser(_user);
+      if(_sonuc){
+        return _user;
+      }
+      
     }
     return null;
   }

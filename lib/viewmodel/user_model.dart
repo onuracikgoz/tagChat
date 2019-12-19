@@ -1,9 +1,9 @@
 
 import 'package:flutter/material.dart';
-import 'package:tagchat/authentication.dart';
 import 'package:tagchat/locator.dart';
 import 'package:tagchat/model/user.dart';
 import 'package:tagchat/repository/user_repository.dart';
+import 'package:tagchat/services/authentication.dart';
 
 enum ViewState { Idle, Busy }
 

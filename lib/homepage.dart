@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tagchat/bottom_navigator_class.dart';
+import 'package:tagchat/navitem.dart';
 
 import 'package:tagchat/repository/user_repository.dart';
 
@@ -23,24 +25,29 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  TabItemName _currentItemName = TabItemName.Anasayfa;
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text("Flutter login demo"),
-      ),
-      body: Column(
-        children: <Widget>[
-          new Container(
-            child: new Text("Hoşgeldin " + widget.userId),
-          ),
+        actions: <Widget>[
           FlatButton(
             child: Text('Çıkış'),
             onPressed: () {
               signOut();
             },
-          )
+          ),
         ],
+        title: Text(
+          'anasayfa',
+        ),
+      ),
+      body: BottomNavigator(
+        currenTabItemName: _currentItemName,
+        onSelectedTab: (onTab) {
+          print('Seçilen Tab:' + onTab.toString());
+        },
       ),
     );
   }
