@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'authentication.dart';
+import 'package:tagchat/repository/user_repository.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({this.auth, this.logoutCallback, this.userId});
+  HomePage({this.logoutCallback, this.userId});
 
-  final BaseAuth auth;
   final VoidCallback logoutCallback;
   final String userId;
 
@@ -14,9 +13,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  UserRepository _userRepository = UserRepository();
   signOut() async {
     try {
-      await widget.auth.signOut();
+      await _userRepository.signOut();
       widget.logoutCallback();
     } catch (e) {
       print(e);
@@ -32,10 +32,10 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         children: <Widget>[
           new Container(
-            child: new Text("Hello World"),
+            child: new Text("Hoşgeldin " + widget.userId),
           ),
           FlatButton(
-            child: Text('Çıkıgrgrgrgş'),
+            child: Text('Çıkış'),
             onPressed: () {
               signOut();
             },

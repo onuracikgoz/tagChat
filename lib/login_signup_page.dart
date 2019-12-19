@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:tagchat/homepage.dart';
-import 'authentication.dart';
+import 'package:tagchat/model/user.dart';
+import 'package:tagchat/repository/user_repository.dart';
 
 class LoginSignPage extends StatefulWidget {
 
-  LoginSignPage({this.auth, this.loginCallBack});
+  LoginSignPage({ this.loginCallBack});
 
-  final BaseAuth auth;
   final VoidCallback loginCallBack;
 
   State<StatefulWidget> createState() => new _LoginSignPage();
 }
 
 class _LoginSignPage extends State<LoginSignPage> {
+  UserRepository _userRepository = UserRepository();
   final _formKey = new GlobalKey<FormState>();
 
   String _email;
@@ -41,14 +41,14 @@ class _LoginSignPage extends State<LoginSignPage> {
     });
 
     if (validateAndSave()) {
-      String userId = ""; 
+      User userId; 
       try {
         if (_isLoginForm) {
-          userId = await widget.auth.signIn(_email, _password);
+          userId = await _userRepository.signIn(_email, _password);
           print('Signed in: $userId');
-          HomePage();
+
         } else {
-          userId = await widget.auth.signUp(_email, _password);
+          userId = await _userRepository.signUp(_email, _password);
           //widget.auth.sendEmailVerification();
           //_showVerifyEmailSentDialog();
           print('Signed up user: $userId');
@@ -58,7 +58,7 @@ class _LoginSignPage extends State<LoginSignPage> {
           _isLoading = false;
         });
 
-        if (userId.length > 0 && userId != null && _isLoginForm) {
+        if (userId.userID.length > 0 && userId != null && _isLoginForm) {
           widget.loginCallBack();
         }
       } catch (e) {
