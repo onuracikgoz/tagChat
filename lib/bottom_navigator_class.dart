@@ -4,38 +4,45 @@ import 'package:tagchat/navitem.dart';
 class BottomNavigator extends StatelessWidget {
   final TabItemName currenTabItemName;
   final ValueChanged<TabItemName> onSelectedTab;
+  final Map<TabItemName, Widget> showNavigator;
+  final Map<TabItemName, GlobalKey<NavigatorState>> navigatorKeys;
 
   const BottomNavigator(
-      {Key key, @required this.currenTabItemName, @required this.onSelectedTab})
+      {Key key,
+      @required this.currenTabItemName,
+      @required this.onSelectedTab,
+      @required this.showNavigator,
+      @required this.navigatorKeys})
       : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
-        items: [
-          _bottomNavigationBarItem(
-            tabItemName: TabItemName.Anasayfa,
-          ),
-          _bottomNavigationBarItem(
-            tabItemName: TabItemName.Hashtags,
-          ),
-          _bottomNavigationBarItem(
-            tabItemName: TabItemName.Kategori,
-          ),
-          _bottomNavigationBarItem(
-            tabItemName: TabItemName.Profil,
-          ),
-        ],
-        onTap: (index) {
-          onSelectedTab(TabItemName.values[index]);
-        }
-      ),
+          items: [
+            _bottomNavigationBarItem(
+              tabItemName: TabItemName.Anasayfa,
+            ),
+            _bottomNavigationBarItem(
+              tabItemName: TabItemName.Hashtags,
+            ),
+            _bottomNavigationBarItem(
+              tabItemName: TabItemName.Kategori,
+            ),
+            _bottomNavigationBarItem(
+              tabItemName: TabItemName.Profil,
+            ),
+          ],
+          onTap: (index) {
+            onSelectedTab(TabItemName.values[index]);
+          }),
       tabBuilder: (context, index) {
-        return CupertinoTabView(
-          builder: (context) => Container(
-            child: Text('Deneme'),
-          ),
-        );
+        final tabIndex = TabItemName.values[index];
+
+        return CupertinoTabView(builder: (context) {
+          return showNavigator[tabIndex];
+        },
+        navigatorKey: navigatorKeys[tabIndex],);
       },
     );
   }

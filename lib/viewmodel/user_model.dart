@@ -1,14 +1,18 @@
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:tagchat/locator.dart';
+import 'package:tagchat/model/chat.dart';
 import 'package:tagchat/model/user.dart';
 import 'package:tagchat/repository/user_repository.dart';
 import 'package:tagchat/services/authentication.dart';
+
 
 enum ViewState { Idle, Busy }
 
 class UserModel with ChangeNotifier implements Auth {
   ViewState _viewState = ViewState.Idle;
+  String errorMessage;
 
   ViewState get viewState => _viewState;
 
@@ -18,31 +22,39 @@ class UserModel with ChangeNotifier implements Auth {
   }
 
   UserRepository _userRepository = locator<UserRepository>();
+
   User _user;
+
+  User get user => _user;
+
+  UserModel(BuildContext context) {
+    getCurrentUser();
+  }
 
   @override
   Future<User> getCurrentUser() async {
     try {
       state = ViewState.Busy;
       _user = await _userRepository.getCurrentUser();
-      return _user;
+      if (_user != null)
+        return _user;
+      else
+        return null;
     } catch (e) {
-      print("CURRENT USER HATASI" + e.toString());
-      return null; 
+      print("viewmodel CURRENT USER HATASI" + e.toString());
+      return null;
     } finally {
-      _viewState = ViewState.Idle;
+      state = ViewState.Idle;
     }
   }
 
   @override
   Future<bool> isEmailVerified() {
-    
     return null;
   }
 
   @override
   Future<void> sendEmailVerification() {
- 
     return null;
   }
 
@@ -50,14 +62,16 @@ class UserModel with ChangeNotifier implements Auth {
   Future<User> signIn(String email, String password) async {
     try {
       state = ViewState.Busy;
-    _user = await _userRepository.signIn(email, password);
+      _user = await _userRepository.signIn(email, password);
+      errorMessage = " ";
 
-    return _user;
+      return _user;
     } catch (e) {
-      print("CURRENT USER HATASI" + e.toString());
+      print("viewmodel signin USER HATASI" + e.toString());
+      errorMessage = e.message.toString();
       return null;
     } finally {
-      _viewState = ViewState.Idle;
+      state = ViewState.Idle;
     }
   }
 
@@ -65,27 +79,48 @@ class UserModel with ChangeNotifier implements Auth {
   Future<void> signOut() async {
     try {
       state = ViewState.Busy;
-      return await _userRepository.signOut;
+      _user = null;
+      return await _userRepository.signOut();
     } catch (e) {
-      print("CURRENT USER HATASI" + e.toString());
+      print("viewmodel signout USER HATASI" + e.toString());
       return null;
     } finally {
-      _viewState = ViewState.Idle;
+      state = ViewState.Idle;
     }
   }
 
   @override
   Future<User> signUp(String email, String password) async {
     try {
-      _viewState = ViewState.Busy;
+      state = ViewState.Busy;
 
       _user = await _userRepository.signUp(email, password);
+      errorMessage = "";
       return _user;
-    } catch (e) {
-      print("CURRENT USER HATASI" + e.toString());
-      return null;
     } finally {
-      _viewState = ViewState.Idle;
+      state = ViewState.Idle;
     }
+  }
+
+  showErrorMessage(String string) {}
+
+  Future<String> uploadFile(String userID, String fileType, File profilFoto) async {
+
+  return  await _userRepository.uploadFile(userID,fileType,profilFoto);
+
+
+
+  }
+
+  Future<bool> createChat({String userID, String title, String hashtag, bool isPrivate, String category}) async {
+
+    return await _userRepository.createChat(userID, title, hashtag, isPrivate, category);
+  }
+
+
+  Future<List<Chat>> getAllChats()async {
+    var allChat = await _userRepository.getAllChats();
+
+    return allChat;
   }
 }
