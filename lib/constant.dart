@@ -8,3 +8,4 @@ const style = TextStyle(
   fontFamily: 'Montserrat',
   fontSize: 20.0,
 );
+const loadingAppNameStyle = TextStyle(fontSize: 30.0,fontWeight: FontWeight.bold);

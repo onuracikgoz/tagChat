@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:tagchat/locator.dart';
 import 'package:tagchat/model/chat.dart';
+import 'package:tagchat/model/message.dart';
 import 'package:tagchat/model/user.dart';
 import 'package:tagchat/repository/user_repository.dart';
 import 'package:tagchat/services/authentication.dart';
@@ -123,4 +124,20 @@ class UserModel with ChangeNotifier implements Auth {
 
     return allChat;
   }
+
+
+  Future<bool> sendMessage (Message message, String chatID)async{
+    return await _userRepository.sendMessage(message,chatID);
+
+
+  }
+
+ Stream<List<Message>> getMessages(String chatID) {
+   return  _userRepository.getMessages(chatID);
+
+
+
+  }
+
+
 }

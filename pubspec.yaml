@@ -29,6 +29,7 @@ dependencies:
   image_picker: ^0.6.2+3
   firebase_storage: ^3.1.0
   dash_chat: ^1.0.10
+  animated_text_kit: ^2.0.0
 
 
   # The following adds the Cupertino Icons font to your application.

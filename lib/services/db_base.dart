@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:tagchat/model/chat.dart';
+import 'package:tagchat/model/message.dart';
 import 'package:tagchat/model/user.dart';
 
 abstract class DBBase {
@@ -14,6 +15,12 @@ abstract class DBBase {
       bool isPrivate, String category);
 
   Future<List<Chat>> getAllChats();
+
+  Future<bool> sendMessage(Message message, String chatID);
+
+
+  Stream<List<Message>> getMessage(String chatID);
+
 }
 
 class FirestoreDBService implements DBBase {
@@ -59,35 +66,58 @@ class FirestoreDBService implements DBBase {
   @override
   Future<bool> createChat(String userID, String title, String hashtag,
       bool isPrivate, String category) async {
+    String _chatID = _firebaseDb.collection("chats").document().documentID;
+
     Chat _chat = Chat(
+        chatID: _chatID,
         userID: userID,
         title: title,
         category: category,
         hashtag: hashtag,
         isPrivate: isPrivate);
 
-    await _firebaseDb.collection("chats").document().setData(_chat.toMap());
+    await _firebaseDb.collection("chats").document(_chatID).setData(_chat.toMap());
+
     return true;
   }
 
   @override
   Future<List<Chat>> getAllChats() async {
-    try{
+    try {
       QuerySnapshot querySnapshot =
-      await _firebaseDb.collection("chats").getDocuments();
+          await _firebaseDb.collection("chats").getDocuments();
       List<Chat> allChats = [];
 
-      allChats = querySnapshot.documents.map((aChat) => Chat.fromMap(aChat.data)).toList();
+      allChats = querySnapshot.documents
+          .map((aChat) => Chat.fromMap(aChat.data))
+          .toList();
 
       print(allChats.toString());
 
       return allChats;
-
-    }catch(e){
+    } catch (e) {
       print(e.message.toString());
       return null;
-
     }
+  }
+
+  Future<bool> sendMessage(Message message, String chatID) async {
+    await _firebaseDb
+        .collection("chats")
+        .document(chatID)
+        .collection("messages")
+        .document()
+        .setData(message.toMap());
+
+    return true;
+  }
+
+  @override
+  Stream<List<Message>> getMessage(String chatID) {
+ var _snapShot =  _firebaseDb.collection("chats").document(chatID).collection("messages").orderBy("messageTime",descending: true).snapshots();
+
+  
+    return _snapShot.map((messageList)=>messageList.documents.map((message)=>Message.fromMap(message.data)).toList());
 
   }
 }

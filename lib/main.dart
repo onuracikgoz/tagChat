@@ -13,14 +13,14 @@ void main() {
 class TagChat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: ChangeNotifierProvider(
-          
-          builder: (context)=>UserModel(context),
-          child: RootPage(),
-          create: (context)=>UserModel(context)),
-          
-        );
+    return ChangeNotifierProvider(
+      child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: RootPage(),
+
+          ),
+      builder: (context)=>UserModel(context),
+      create: (context)=>UserModel(context));
+
   }
 }
