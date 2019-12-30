@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-enum TabItemName { Anasayfa, Hashtags, Kategori, Profil }
+enum TabItemName { Mainpage, Hashtags, Search, Category,Profile }
 
 class TabItemData {
   TabItemData(this.title, this.icon);
@@ -10,10 +10,11 @@ class TabItemData {
   final IconData icon;
 
  static Map <TabItemName, TabItemData> tabItemsMap = {
-TabItemName.Anasayfa: TabItemData('Anasayfa',Icons.home),
-TabItemName.Profil: TabItemData('Profil',Icons.supervised_user_circle),
+TabItemName.Mainpage: TabItemData('Anasayfa',Icons.home),
+TabItemName.Profile: TabItemData('Profil',Icons.supervised_user_circle),
 TabItemName.Hashtags: TabItemData('Hashtags',Icons.whatshot),
-TabItemName.Kategori: TabItemData('Kategori',Icons.category)
+TabItemName.Category: TabItemData('Kategori',Icons.language),
+TabItemName.Search: TabItemData('Search',Icons.search)
 
  } ;
 }

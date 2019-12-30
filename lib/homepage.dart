@@ -5,6 +5,7 @@ import 'package:tagchat/hashtagpage_navigator.dart';
 import 'package:tagchat/homepage_navigator.dart';
 import 'package:tagchat/navitem.dart';
 import 'package:tagchat/profilpage_navigator.dart';
+import 'package:tagchat/searchpage_navigator.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({this.userId});
@@ -16,21 +17,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  TabItemName _currentItemName = TabItemName.Anasayfa;
+  TabItemName _currentItemName = TabItemName.Mainpage;
 
   Map<TabItemName, GlobalKey<NavigatorState>> navigatorKeys = {
-    TabItemName.Anasayfa: GlobalKey<NavigatorState>(),
+    TabItemName.Mainpage: GlobalKey<NavigatorState>(),
     TabItemName.Hashtags: GlobalKey<NavigatorState>(),
-    TabItemName.Kategori: GlobalKey<NavigatorState>(),
-    TabItemName.Profil: GlobalKey<NavigatorState>(),
+    TabItemName.Category: GlobalKey<NavigatorState>(),
+    TabItemName.Profile: GlobalKey<NavigatorState>(),
+    TabItemName.Search: GlobalKey<NavigatorState>(),
   };
 
   Map<TabItemName, Widget> showNavigatorPage() {
     return {
-      TabItemName.Anasayfa: HomePageNavigator(),
-      TabItemName.Profil: ProfilPageNavigator(),
+      TabItemName.Mainpage: HomePageNavigator(),
+      TabItemName.Profile: ProfilPageNavigator(),
       TabItemName.Hashtags: HashtagPageNavigator(),
-      TabItemName.Kategori: CategoryPageNavigator()
+      TabItemName.Category: CategoryPageNavigator(),
+      TabItemName.Search: SearchPageNavigator(),
     };
   }
 

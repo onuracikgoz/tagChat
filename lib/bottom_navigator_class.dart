@@ -21,17 +21,20 @@ class BottomNavigator extends StatelessWidget {
       tabBar: CupertinoTabBar(
           items: [
             _bottomNavigationBarItem(
-              tabItemName: TabItemName.Anasayfa,
+              tabItemName: TabItemName.Mainpage,
             ),
             _bottomNavigationBarItem(
               tabItemName: TabItemName.Hashtags,
             ),
             _bottomNavigationBarItem(
-              tabItemName: TabItemName.Kategori,
+              tabItemName: TabItemName.Search,
             ),
             _bottomNavigationBarItem(
-              tabItemName: TabItemName.Profil,
+              tabItemName: TabItemName.Category,
             ),
+            _bottomNavigationBarItem(
+              tabItemName: TabItemName.Profile,
+            )
           ],
           onTap: (index) {
             onSelectedTab(TabItemName.values[index]);

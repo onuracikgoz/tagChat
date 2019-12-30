@@ -1,5 +1,7 @@
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dash_chat/dash_chat.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tagchat/constant.dart';
@@ -45,7 +47,9 @@ class _ChatScreenState extends State<ChatScreen> {
                           messageText: _streamMessage.message,
                           userID: _streamMessage.userID,
                       isMe: _streamMessage.userID == _userModel.user.userID,
-                      userName: _streamMessage.userName);
+                      userName: _streamMessage.userName,
+                        date: _streamMessage.messageTime
+                      );
                     },
                     itemCount: streamMessages.data.length,
                   );
@@ -77,6 +81,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     ),
                     Container(
+
                       margin: EdgeInsets.symmetric(horizontal: 4),
                       child: FloatingActionButton(
                         elevation: 1.0,
@@ -109,51 +114,96 @@ class _ChatScreenState extends State<ChatScreen> {
       Message _sendingMessage = Message(
         userID: _userModel.user.userID,
         message: _messageController.text,
-        messageTime: DateTime.now(),
+
         userName: _userModel.user.userName
       );
       _userModel.sendMessage(_sendingMessage, widget.chatID);
     }
   }
 
-  messageBallon({String messageText, String userID, bool isMe,String userName}) {
+  messageBallon({String messageText, String userID, bool isMe,String userName,Timestamp date}) {
+
+
+
+    String _messageTime;
+    String _timeConvert(Timestamp date){
+
+      var _dateConvert = DateFormat.Hm();
+      var _time = _dateConvert.format(date.toDate());
+      return _time;
+
+    }
+
+
+    try{
+      _messageTime = _timeConvert(date ?? Timestamp(1,1));
+    } catch(e){
+
+
+    }
+
+
+
+
+
+
 
 return Padding(
-      padding: EdgeInsets.only(left: 10.0,right: 10.0,bottom: 2.0),
+      padding: EdgeInsets.only(left: 10.0,right: 10.0,bottom: 7.0,top: 4.0),
       child: Column(
         crossAxisAlignment:
         isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            userName,
-            style: TextStyle(
-              fontSize: 12.0,
-              color: Colors.black54,
-            ),
-          ),
-          Material(
-            borderRadius: isMe
-                ? BorderRadius.only(
-                topLeft: Radius.circular(30.0),
-                bottomLeft: Radius.circular(30.0),
-                bottomRight: Radius.circular(30.0))
-                : BorderRadius.only(
-              bottomLeft: Radius.circular(30.0),
-              bottomRight: Radius.circular(30.0),
-              topRight: Radius.circular(30.0),
-            ),
-            elevation: 5.0,
-            color: isMe ? Colors.lightBlueAccent : Colors.white,
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-              child: Text(
-                messageText,
-                style: TextStyle(
-                  color: isMe ? Colors.white : Colors.black54,
-                  fontSize: 15.0,
+
+          Row(
+            mainAxisAlignment: isMe ? MainAxisAlignment.end: MainAxisAlignment.start,
+            children: <Widget>[
+              isMe ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(_messageTime,style: timeStyle,)) : Text("") ,
+
+              Flexible(
+                child: Material(
+                  borderRadius: isMe
+                      ? BorderRadius.only(
+                      topLeft: Radius.circular(30.0),
+                      bottomLeft: Radius.circular(30.0),
+                      bottomRight: Radius.circular(30.0))
+                      : BorderRadius.only(
+                    bottomLeft: Radius.circular(30.0),
+                    bottomRight: Radius.circular(30.0),
+                    topRight: Radius.circular(30.0),
+                  ),
+                  elevation: 5.0,
+                  color: isMe ? Colors.lightBlueAccent : Colors.white,
+                  child: Column(
+                    crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                    children: <Widget>[
+                      !isMe?
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2.0,left: 15.0,right: 15.0,bottom: 2.0),
+                        child: Text(userName,style: TextStyle(color: Colors.orange),),
+                      ): Text("",style: TextStyle(fontSize: 5.0),),
+                      Padding(
+                        padding: EdgeInsets.only(top: 2.0,left: 15.0,right: 10.0,bottom: 10.0),
+                        child: Text(
+                          messageText,
+                          style: TextStyle(
+                            color: isMe ? Colors.white : Colors.black54,
+                            fontSize: 15.0,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
+              isMe ? Text("") :
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(_messageTime,style: timeStyle,),
+              )
+            ],
           ),
         ],
       ),

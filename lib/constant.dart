@@ -9,3 +9,4 @@ const style = TextStyle(
   fontSize: 20.0,
 );
 const loadingAppNameStyle = TextStyle(fontSize: 30.0,fontWeight: FontWeight.bold);
+const timeStyle = TextStyle(fontSize: 12.0,fontWeight: FontWeight.w100);
