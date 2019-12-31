@@ -13,7 +13,8 @@ enum AppMode { DEBUG, RELEASE }
 class UserRepository implements Auth {
   Auth _firebaseAuth = locator<Auth>();
   FirestoreDBService _firestoreDBService = locator<FirestoreDBService>();
-  FirestoreStorageService _firestoreStorageService = locator<FirestoreStorageService>();
+  FirestoreStorageService _firestoreStorageService =
+      locator<FirestoreStorageService>();
 
   AppMode appMode = AppMode.RELEASE;
 
@@ -75,66 +76,55 @@ class UserRepository implements Auth {
     }
   }
 
- Future<String> uploadFile(String userID, String fileType, File profilImgURL)async {
-   if (appMode == AppMode.RELEASE) {
+  Future<String> uploadFile(
+      String userID, String fileType, File profilImgURL) async {
+    if (appMode == AppMode.RELEASE) {
+      var url = await _firestoreStorageService.uploadFile(
+          userID, fileType, profilImgURL);
+      await _firestoreDBService.updateProfilImage(userID, url);
 
-    var url=  await _firestoreStorageService.uploadFile(userID,fileType,profilImgURL);
-  await _firestoreDBService.updateProfilImage(userID, url);
-
-     return url;
-   } else return null;
-
-
- }
-
-
-
-  Future<bool> createChat(String userID, String title, String hashtag, bool isPrivate, String category) async {
-
-
-    return await _firestoreDBService.createChat(userID, title, hashtag, isPrivate, category);
+      return url;
+    } else
+      return null;
   }
 
-  Future<List<Chat>> getAllChats()async {
+  Future<bool> createChat(String userID, String title, String hashtag,
+      bool isPrivate, String category) async {
+    return await _firestoreDBService.createChat(
+        userID, title, hashtag, isPrivate, category);
+  }
 
+  Future<List<Chat>> getAllChats() async {
     if (appMode == AppMode.RELEASE) {
-
       var allChat = await _firestoreDBService.getAllChats();
       return allChat;
-
-
     }
     return null;
-
-
   }
 
-  Future<bool> sendMessage(Message message,String chatID) async{
-
+  Future<bool> sendMessage(Message message, String chatID) async {
     if (appMode == AppMode.RELEASE) {
-
-      return await _firestoreDBService.sendMessage(message,chatID);
-
-
+      return await _firestoreDBService.sendMessage(message, chatID);
     }
     return null;
-
-
   }
 
-  Stream<List<Message>> getMessages(String chatID) {
+  Stream<List<Message>> getMessages(String chatID)  {
     if (appMode == AppMode.RELEASE) {
-
       return _firestoreDBService.getMessage(chatID);
-
-    }else return null;
-
-
-
-
-
-
+    } else
+      return null;
   }
 
+  Future<List<User>> getChatInfo(String chatID) async {
 
+    return await _firestoreDBService.getChatInfo(chatID);
+  }
+
+  Future<void>enterChat(String userID, String chatID) async{
+
+    if (appMode == AppMode.RELEASE) {
+      await _firestoreDBService.enterChat(userID,chatID);
+    }
+  }
 }

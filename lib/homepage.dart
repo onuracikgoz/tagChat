@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tagchat/bottom_navigator_class.dart';
 import 'package:tagchat/categorypage_navigator.dart';
 import 'package:tagchat/hashtagpage_navigator.dart';
@@ -6,6 +7,7 @@ import 'package:tagchat/homepage_navigator.dart';
 import 'package:tagchat/navitem.dart';
 import 'package:tagchat/profilpage_navigator.dart';
 import 'package:tagchat/searchpage_navigator.dart';
+import 'package:tagchat/viewmodel/chats_model.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({this.userId});
@@ -42,23 +44,27 @@ class _HomePageState extends State<HomePage> {
     return WillPopScope(
       onWillPop: () async =>
           !await navigatorKeys[_currentItemName].currentState.maybePop(),
-      child: BottomNavigator(
-        navigatorKeys: navigatorKeys,
-        currenTabItemName: _currentItemName,
-        onSelectedTab: (onTab) {
-          if (onTab == _currentItemName) {
-            navigatorKeys[onTab]
-                .currentState
-                .popUntil((route) => route.isFirst);
-          } else {
-            setState(() {
-              _currentItemName = onTab;
-            });
-          }
+      child: ChangeNotifierProvider(
+          builder: (context)=>ChatsModel(),
+          create: (context)=>ChatsModel(),
+        child: BottomNavigator(
+          navigatorKeys: navigatorKeys,
+          currenTabItemName: _currentItemName,
+          onSelectedTab: (onTab) {
+            if (onTab == _currentItemName) {
+              navigatorKeys[onTab]
+                  .currentState
+                  .popUntil((route) => route.isFirst);
+            } else {
+              setState(() {
+                _currentItemName = onTab;
+              });
+            }
 
-          print('Seçilen Tab:' + onTab.toString());
-        },
-        showNavigator: showNavigatorPage(),
+            print('Seçilen Tab:' + onTab.toString());
+          },
+          showNavigator: showNavigatorPage(),
+        ),
       ),
     );
   }

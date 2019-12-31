@@ -35,6 +35,10 @@ class User {
         createdAt = (map['createdAt'] as Timestamp).toDate(),
         updatedAt = (map['updatedAt'] as Timestamp).toDate(),
         seviye = map['seviye'];
+
+  User.fromMapOne(Map<String, dynamic> map)
+      : userID = map['userID'];
+
   @override
   String toString() {
     return 'User{userID: $userID, email: $email, userName: $userName, profilURL: $profilURL, createdAt: $createdAt, updatedAt: $updatedAt, seviye: $seviye}';

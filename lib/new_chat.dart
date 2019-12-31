@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tagchat/constant.dart';
+import 'package:tagchat/viewmodel/chats_model.dart';
 import 'package:tagchat/viewmodel/user_model.dart';
 
 class NewChatPage extends StatefulWidget {
@@ -36,7 +37,7 @@ class _NewChatPageState extends State<NewChatPage> {
           child: Container(
               child: new Text(
                 city,
-                style: style,
+                style: loginPrimaryButton,
               ))));
     }
     return items;
@@ -104,8 +105,9 @@ class _NewChatPageState extends State<NewChatPage> {
 
 createChat (BuildContext context){
   UserModel _userModel = Provider.of<UserModel>(context);
+  ChatsModel _chatModel = Provider.of<ChatsModel>(context);
     if (validateAndSave()){
-      _userModel.createChat(
+      _chatModel.createChat(
           userID: _userModel.user.userID,
           category: _currentCategory,
           hashtag: _hashtag,
@@ -131,7 +133,7 @@ createChat (BuildContext context){
 
         child: Text("KONU BAŞLAT",
             textAlign: TextAlign.center,
-            style: style.copyWith(
+            style: loginPrimaryButton.copyWith(
                 color: Colors.white, fontWeight: FontWeight.bold)),
       ),
     );
@@ -141,7 +143,7 @@ createChat (BuildContext context){
     return TextFormField(
       obscureText: false,
       maxLines: 1,
-      style: style,
+      style: loginPrimaryButton,
       autofocus: false,
       validator: (value) =>
       value.isEmpty

@@ -53,7 +53,7 @@ class _ProfilPageNavigatorState extends State<ProfilPageNavigator> {
           padding: const EdgeInsets.all(8.0),
           child: Container(
             decoration: BoxDecoration(
-              boxShadow: [BoxShadow(color: Colors.black, blurRadius: 5.0)],
+              boxShadow: [BoxShadow(color: Colors.lightBlueAccent, blurRadius: 5.0)],
               color: Colors.white,
               borderRadius: BorderRadius.circular(5.0),
             ),

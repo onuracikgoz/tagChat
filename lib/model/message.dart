@@ -7,6 +7,7 @@ class Message {
   final Timestamp messageTime;
   final String userName;
 
+
   Message({this.userName, this.userID, this.message, this.messageTime});
 
   Map<String, dynamic> toMap() {

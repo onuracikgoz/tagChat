@@ -18,9 +18,7 @@ abstract class DBBase {
 
   Future<bool> sendMessage(Message message, String chatID);
 
-
   Stream<List<Message>> getMessage(String chatID);
-
 }
 
 class FirestoreDBService implements DBBase {
@@ -76,7 +74,10 @@ class FirestoreDBService implements DBBase {
         hashtag: hashtag,
         isPrivate: isPrivate);
 
-    await _firebaseDb.collection("chats").document(_chatID).setData(_chat.toMap());
+    await _firebaseDb
+        .collection("chats")
+        .document(_chatID)
+        .setData(_chat.toMap());
 
     return true;
   }
@@ -114,10 +115,65 @@ class FirestoreDBService implements DBBase {
 
   @override
   Stream<List<Message>> getMessage(String chatID) {
- var _snapShot =  _firebaseDb.collection("chats").document(chatID).collection("messages").orderBy("messageTime",descending: true).snapshots();
+    var _snapShot = _firebaseDb
+        .collection("chats")
+        .document(chatID)
+        .collection("messages")
+        .orderBy("messageTime", descending: true)
+        .snapshots();
 
-  
-    return _snapShot.map((messageList)=>messageList.documents.map((message)=>Message.fromMap(message.data)).toList());
+    return _snapShot.map((messageList) => messageList.documents
+        .map((message) => Message.fromMap(message.data))
+        .toList());
+  }
 
+  Future<List<User>> getChatInfo(String chatID) async {
+    List<User> _currentUserInChat;
+    List<User> _currentUserInChat2;
+    try {
+      QuerySnapshot querySnapshot = await _firebaseDb
+          .collection("chats")
+          .document(chatID)
+          .collection("currentUsers")
+          .getDocuments();
+      _currentUserInChat= [];
+      _currentUserInChat = querySnapshot.documents
+          .map((aUser) => User.fromMapOne(aUser.data))
+          .toList();
+
+      _currentUserInChat2 = [];
+
+
+      for (User user in _currentUserInChat) {
+        QuerySnapshot _userData = await _firebaseDb
+            .collection("users")
+            .where("userID", isEqualTo: user.userID)
+            .getDocuments();
+
+        for( DocumentSnapshot user2 in _userData.documents){
+          User _user2 = User.fromMap(user2.data);
+          _currentUserInChat2.add(_user2);
+        }
+
+            
+
+      }
+
+      print(_currentUserInChat2);
+
+      return _currentUserInChat2;
+    } catch (e) {
+      print(e.message.toString());
+      return null;
+    }
+  }
+
+  Future<void> enterChat(String userID, String chatID) async {
+    await _firebaseDb
+        .collection("chats")
+        .document(chatID)
+        .collection("currentUsers")
+        .document(userID)
+        .setData({"userID": userID});
   }
 }

@@ -89,7 +89,7 @@ class _LoginSignPage extends State<LoginSignPage> {
 
       maxLines: 1,
       keyboardType: TextInputType.emailAddress,
-      style: style,
+      style: loginEmailField,
       autofocus: false,
       decoration: InputDecoration(
         focusedBorder: OutlineInputBorder(
@@ -112,7 +112,7 @@ class _LoginSignPage extends State<LoginSignPage> {
   Widget passwordField() {
     return TextFormField(
       obscureText: true,
-      style: style,
+      style: loginPasswordField,
       decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
@@ -129,9 +129,9 @@ class _LoginSignPage extends State<LoginSignPage> {
   }
 
   final logo = Padding(
-    padding: EdgeInsets.all(1.0),
+    padding: EdgeInsets.all(20.0),
     child: SizedBox(
-      height: 155.0,
+      height: 100.0,
       child: Image.asset(
         "images/logologo.png",
         fit: BoxFit.contain,
@@ -150,8 +150,7 @@ class _LoginSignPage extends State<LoginSignPage> {
         onPressed: () => validateAndSubmit(context),
         child: Text(_isLoginForm ? 'Login' : 'Create account',
             textAlign: TextAlign.center,
-            style: style.copyWith(
-                color: Colors.white, fontWeight: FontWeight.bold)),
+            style: loginPrimaryButton),
       ),
     );
   }
@@ -164,8 +163,7 @@ class _LoginSignPage extends State<LoginSignPage> {
       child: Text(
           _isLoginForm ? 'Create an account' : 'Have an account? Sign in',
           textAlign: TextAlign.center,
-          style: style.copyWith(
-              color: Color(0xff01A0C7), fontWeight: FontWeight.bold)),
+          style: loginSecondButton),
     );
   }
 
@@ -175,41 +173,34 @@ class _LoginSignPage extends State<LoginSignPage> {
       child: Container(
         color: Colors.white,
         child: Padding(
-          padding: const EdgeInsets.all(36.0),
+          padding: const EdgeInsets.only(right: 15.0 ,left: 15.0,bottom: 30.0,top: 30.0),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Expanded(flex: 4, child: logo),
-                Expanded(
-                  flex: 3,
-                  child: Container(
-                      child: Column(
-                    children: <Widget>[
-                      Expanded(child: emailField()),
-                      Expanded(child: passwordField()),
-                    ],
-                  )),
+                 logo,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: emailField(),
                 ),
-                Expanded(
-                  flex: 3,
-                  child: Column(
-                    children: <Widget>[
-                      Expanded(flex: 1, child: primaryButton()),
-                      SizedBox(
-                        height: 30.0,
-                      ),
-                      Expanded(flex: 1, child: secondaryButton()),
-                    ],
-                  ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: passwordField(),
                 ),
-                Expanded(
-                  child: Text(_userModel.errorMessage != null
-                      ? _userModel.errorMessage
-                      : ''),
-                )
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: primaryButton(),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: secondaryButton(),
+                ),
+                Text(_userModel.errorMessage != null
+                    ? _userModel.errorMessage
+                    : '')
               ],
             ),
           ),
